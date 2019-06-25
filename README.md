@@ -2,7 +2,7 @@
 
 ## Présentation du Groupe B
 * FERNANDES William  
-* ILUUNGA KILUMBU A MUTEB Amos
+* ILUNGA KILUMBU A MUTEB Amos
 
 ## Enoncé
 Nous sommes l’entreprise **Connected Flowers** qui souhaite développer un objet connecté permettant à une personne sans connaissance particulière en botanique de faire pousser des plantes chez soi ou en extérieur. Connected Flowers fournit une base de données, que l’utilisateur peut étendre, qui contient initialement les spécifications d’environ 30 plantes de la région.

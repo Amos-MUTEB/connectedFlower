@@ -1,0 +1,10 @@
+Le Houx;25;275;45;50
+Erable negundo;28;235;30;25
+Arbre aux papillons;15;175;43;20
+Berce de caucasse;20;316;50;28
+Vigne vierge vraie;18;275;48;15
+Agripaume;23;231;21;10
+Aster amelle;251;26;20;32
+Laiche apauvrie;30;257;16;12
+Erable sycomore;12;235;65;54
+Solidage geant;15;543;23;45
