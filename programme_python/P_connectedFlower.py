@@ -17,7 +17,7 @@ identifiant= input("\nQuelle est votre identifiant: ")
 motdepasse= input("\nEntrez votre mot de passe: ")
 motdepasse_poid = len(motdepasse)
 if motdepasse_poid < 8 :
-   print("mot de passe trop court")
+   print("mot de passe trop court") # condition de sécurité
 else:
    print("\n\t\t\t ---  Bienvenue Monsieur {}, sur connectedFlower ! --- \n\n".format(identifiant))
 
@@ -28,17 +28,17 @@ informations=[
         "2. Informations sur les capteurs",
         "3. Bilan de la plante"
         ]
-print(informations[1])
-print(informations[2])
-print(informations[3])
-choix = int(input("\nQuelles informations souhaitez-vous consulté : "))
+print(informations[1]) # affiche la ligne 1 du tableau
+print(informations[2]) # affiche la ligne 2 du tableau
+print(informations[3]) # affiche la ligne 3 du tableau
+choix = int(input("\nQuelles informations souhaitez-vous consulté : ")) # transforme le choix de l'utilisateur en un entier
 
-# choix 1 inforamtion sur la plante
-if (choix==1):
-    tableauPlante= []
-    for line in fichier:
+# choix 1 information sur la plante
+if (choix==1): # le choix de l'utilisateur à la valeur 1
+    tableauPlante= [] # creer un tableau
+    for line in fichier: 
         tableau = [line.replace('\n', '').split(";")]
-        tableauPlante += tableau
+        tableauPlante += tableau 
 
     print(tableauPlante) # affiche les plantes disponible dans la base de donée
     choix2 = input("\n Taper le nom de la plante : ") # demande à l'utilisateur son de choix de plante
@@ -48,11 +48,10 @@ if (choix==1):
             plante = i
 
     for valeur in plante:
-        # plante= int ((plante[0]))   
-        lumiere = float((plante[1]))
-        humidite = float((plante[2]))
-        temperature= float((plante[3]))
-        humiditeS= float((plante[4]))
+        lumiere = float((plante[1])) # transforme les valeurs du capteur de lumière en décimale
+        humidite = float((plante[2])) # transforme les valeurs du capteur d'humidité ambiante en décimale
+        temperature= float((plante[3])) # transforme les valeurs du capteur de temperature en décimale
+        humiditeS= float((plante[4])) # transforme les valeurs du capteur d'humidité en décimale
 
     # affiche les informations de la base de donnée
     print("\n\t\t\t Voici les informations de la plante : " , choix2)
@@ -61,7 +60,7 @@ if (choix==1):
     print("- Température ambiante maximale : " , temperature, "dégré")
     print("- Humidite du sol : " , humiditeS, "%")
 
-
+# condition sécuritaire 
     choi = int(input("\nTapez 0 pour revenir en arrière et 5 pour quitter: "))
     if choi== 0:
         print(informations[1])

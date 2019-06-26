@@ -14,3 +14,26 @@ Par ailleurs, l’utilisateur peut aussi planifier de planter une plante spécif
 ## BESOINS MATÉRIELS ET LOGICIELS
 Matériel : Arduino, Capteurs & actionneurs,  
 Logiciels : Éditeur de texte, IDE pour programmer en python
+
+## SOMMAIRE
+
+Présentation du projet
+Logigramme du projet	
+Descriptif du projet
+ Matériels	
+-	Capteur SEN 0193	
+-	Capteur DHT11	
+-	Capteur APDS-9301	
+-	Carte Uno Wifi Rev 2	
+-	Breadbord	
+ Logiciels	
+-	Arduino Web	
+-	Python (spider)	
+ Composants et Connexions	
+Programmation arduino	
+ Connexion au serveur thinger.io	
+Programmation python	
+ Connexion à la base de donnée	
+Conclusion	
+ Difficultés rencontrées	
+ Perspective d’évolution	
