@@ -6,21 +6,22 @@ Created on Mon Jun 24 12:42:34 2019
 """
 
 # import datetime, 
-
-
 import requests # librairie, pouvoir interroger un serveur distant
 import json # librairie, interpreter et format les données json
 
+# ouverture de la base de donnée 
 fichier = open("Bd_connectedFlower.txt","r")
 
+# authentification afin de voir les ressources 
 identifiant= input("\nQuelle est votre identifiant: ")
-password= input("\nEntrez votre mot de passe: ")
-password_lenght = len(password)
-if password_lenght < 8 :
+motdepasse= input("\nEntrez votre mot de passe: ")
+motdepasse_poid = len(motdepasse)
+if motdepasse_poid < 8 :
    print("mot de passe trop court")
 else:
    print("\n\t\t\t ---  Bienvenue Monsieur {}, sur connectedFlower ! --- \n\n".format(identifiant))
 
+# 1er tableau d'affichage 
 informations=[
         "securite",
         "1. Informations sur la plante",
@@ -39,16 +40,12 @@ if (choix==1):
         tableau = [line.replace('\n', '').split(";")]
         tableauPlante += tableau
 
-    print(tableauPlante)
-    choice = input("\n Taper le nom de la plante : ")
+    print(tableauPlante) # affiche les plantes disponible dans la base de donée
+    choix2 = input("\n Taper le nom de la plante : ") # demande à l'utilisateur son de choix de plante
     plante = "aucune plante trouvée"
     for i in tableauPlante:
-        if (i[0] == choice):
+        if (i[0] == choix2):
             plante = i
-        #else:
-         #   print("\n Aucune plante trouvée")
-            #choice = input("\n Taper le nom de la plante : ")
-    #print(choice)
 
     for valeur in plante:
         # plante= int ((plante[0]))   
@@ -57,9 +54,8 @@ if (choix==1):
         temperature= float((plante[3]))
         humiditeS= float((plante[4]))
 
-    final = temperature + humidite
-    #print("le nom de la plante est : " , plante)
-    print("\n\t\t\t Voici les informations de la plante : " , choice)
+    # affiche les informations de la base de donnée
+    print("\n\t\t\t Voici les informations de la plante : " , choix2)
     print("\n- Lumiere maximale de la plante : " , lumiere, "lux")
     print("- Humidité maximal de la plante : " , humidite, "%")
     print("- Température ambiante maximale : " , temperature, "dégré")
@@ -72,8 +68,8 @@ if (choix==1):
         print(informations[2])
         print(informations[3])
         choix = int(input("\nQuelles informations souhaitez-vous consulté : "))
-# informations sur les capteurs
         
+# choix 2 informations sur les capteurs
 elif choix ==2:
     url_api= "https://api.thinger.io/"
     parametre = "oauth/token"
@@ -101,47 +97,49 @@ elif choix ==2:
     tab = []
     main_api =url_api + parametre
     object_api = requests.get(main_api)
-    temperature = (object_api.json())
+    temperature = (object_api.json()) # recupère la valeur de la température sur le serveur et la stock dans la variable temperature
 
     # récuperation de la valeur de la lumière sur le serveur thinger.io
     parametre ="v2/users/Amos/devices/Amosmuteb/lux?authorization="+ json_data["access_token"]
     tab = []
     main_api =url_api + parametre
     object_api = requests.get(main_api)
-    light = (object_api.json())
+    lumiere1 = (object_api.json()) # recupère la valeur de la lumière sur le serveur et la stock dans la variable lumiere1
     
     # récuperation de la valeur de l'humidité sur le serveur thinger.io
     parametre ="v2/users/Amos/devices/Amosmuteb/Humidité_ambiante?authorization="+ json_data["access_token"]
     tab = []
     main_api =url_api + parametre
     object_api = requests.get(main_api)
-    humidity = (object_api.json())
+    humidite = (object_api.json()) # recupère la valeur de la humidite sur le serveur et la stock dans la variable humidite
 
     # récuperation de la valeur de l'humidité du sol sur le serveur thinger.io
     parametre ="v2/users/Amos/devices/Amosmuteb/Humidite_du_sol?authorization="+ json_data["access_token"]
     tab = []
     main_api =url_api + parametre
     object_api = requests.get(main_api)
-    soil_moisture = (object_api.json())
+    sol_humidite = (object_api.json()) # recupère la valeur de la humidite du sol sur le serveur et la stock dans la variable sol_humidite
 
     # stockage des valeurs prisent sur arduino
     capteur = {
-        "lumiere": light['out'],
+        "lumiere": lumiere1['out'],
         "temperature" : temperature ['out'],
-        "humidite_ambiante": humidity ['out'],
-        "humidite_du_sol" : soil_moisture ['out']
+        "humidite_ambiante": humidite ['out'],
+        "humidite_du_sol" : sol_humidite ['out']
         }
 
     # affichage des valeurs de capteurs
-    print ("Lumiere optimale : " , capteur["lumiere"])
+    print ("Lumiere optimale : " , capteur["lumiere"]) 
     print ("Température ambiante : " , capteur["temperature"])
     print ("Humidité ambiante : " , capteur["humidite_ambiante"])
     print ("Humidité du sol  : " , capteur["humidite_du_sol"])
     
     choix = input("\nTapez 0 pour revenir en arrière et 5 pour quitter:  ")
-
+    
+ # choix 3 possibilité de melanger les deux informations et de pouvoir les traiters
 elif choix ==3:
     print ("\nl'Amour de Dieu est immense")
+
 else:
     print("\nVeuillez choisir une option !!! \n")
     print(informations[1])
