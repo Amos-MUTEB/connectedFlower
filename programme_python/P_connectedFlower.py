@@ -4,22 +4,33 @@ Created on Mon Jun 24 12:42:34 2019
 
 @author: amosm
 """
-
 # import datetime, 
 import requests # librairie, pouvoir interroger un serveur distant
 import json # librairie, interpreter et format les données json
+import hashlib
+from getpass import getpass
 
 # ouverture de la base de donnée 
 fichier = open("Bd_connectedFlower.txt","r")
 
 # authentification afin de voir les ressources 
 identifiant= input("\nQuelle est votre identifiant: ")
-motdepasse= input("\nEntrez votre mot de passe: ")
-motdepasse_poid = len(motdepasse)
-if motdepasse_poid < 8 :
-   print("mot de passe trop court") # condition de sécurité
-else:
-   print("\n\t\t\t ---  Bienvenue Monsieur {}, sur connectedFlower ! --- \n\n".format(identifiant))
+chaine_mot_de_passe = b"Plante"
+mot_de_passe_chiffre = hashlib.sha1(chaine_mot_de_passe).hexdigest()
+
+verrouille = True
+while verrouille:
+    entre = getpass("\nTapez le mot de passe : ") # azerty
+    # On encode la saisie pour avoir un type bytes
+    entre = entre.encode()
+    
+    entre_chiffre = hashlib.sha1(entre).hexdigest()
+    if entre_chiffre == mot_de_passe_chiffre:
+        verrouille = False
+    else:
+        print("\nMot de passe incorrect")
+
+print("\n\t\t\t ---  Bienvenue Monsieur {}, sur Connected Flowers ! --- \n".format(identifiant))
 
 # 1er tableau d'affichage 
 informations=[
@@ -28,9 +39,7 @@ informations=[
         "2. Informations sur les capteurs",
         "3. Bilan de la plante"
         ]
-print(informations[1]) # affiche la ligne 1 du tableau
-print(informations[2]) # affiche la ligne 2 du tableau
-print(informations[3]) # affiche la ligne 3 du tableau
+print("\n",informations[1],"\n",informations[2],"\n",informations[3]) # affiche la ligne 1 du tableau
 choix = int(input("\nQuelles informations souhaitez-vous consulté : ")) # transforme le choix de l'utilisateur en un entier
 
 # choix 1 information sur la plante
@@ -69,80 +78,80 @@ if (choix==1): # le choix de l'utilisateur à la valeur 1
         choix = int(input("\nQuelles informations souhaitez-vous consulté : "))
         
 # choix 2 informations sur les capteurs
-elif choix ==2:
-    url_api= "https://api.thinger.io/"
-    parametre = "oauth/token"
+    if choix ==2:
+        url_api= "https://api.thinger.io/"
+        parametre = "oauth/token"
 
-    main_api = url_api + parametre
+        main_api = url_api + parametre
 
 #informations de connexion à thinger.io
-    mydata ={ "Content-Type": "application/x-www-form-urlencoded ",
-        "grant_type" : "password",
-        "username" : "Amos",
-        "password" : "Planteconnecte"
-        }
+        mydata ={ "Content-Type": "application/x-www-form-urlencoded ",
+            "grant_type" : "password",
+            "username" : "Amos",
+            "password" : "Planteconnecte"
+            }
 
-    objet_api= requests.post(main_api, data = mydata)
-    json_data = objet_api.json()
+        objet_api= requests.post(main_api, data = mydata)
+        json_data = objet_api.json()
 
-    main_api = url_api + parametre
-    parametre = "v1/users/Amos/devices?authorization=" + json_data["access_token"]
-    main_api =  url_api + parametre
+        main_api = url_api + parametre
+        parametre = "v1/users/Amos/devices?authorization=" + json_data["access_token"]
+        main_api =  url_api + parametre
 
-    print(requests.get(main_api).json()) # vérifie si il y a une connexion établie entre l'API arduino et le serveur thinger.io
+        print(requests.get(main_api).json()) # vérifie si il y a une connexion établie entre l'API arduino et le serveur thinger.io
 
     # récuperation de la valeur de la température sur le serveur thinger.io
-    parametre ="v2/users/Amos/devices/Amosmuteb/Température?authorization="+ json_data["access_token"]
-    tab = []
-    main_api =url_api + parametre
-    object_api = requests.get(main_api)
-    temperature = (object_api.json()) # recupère la valeur de la température sur le serveur et la stock dans la variable temperature
+        parametre ="v2/users/Amos/devices/Amosmuteb/Température?authorization="+ json_data["access_token"]
+        tab = []
+        main_api =url_api + parametre
+        object_api = requests.get(main_api)
+        temperature = (object_api.json()) # recupère la valeur de la température sur le serveur et la stock dans la variable temperature
 
     # récuperation de la valeur de la lumière sur le serveur thinger.io
-    parametre ="v2/users/Amos/devices/Amosmuteb/lux?authorization="+ json_data["access_token"]
-    tab = []
-    main_api =url_api + parametre
-    object_api = requests.get(main_api)
-    lumiere1 = (object_api.json()) # recupère la valeur de la lumière sur le serveur et la stock dans la variable lumiere1
+        parametre ="v2/users/Amos/devices/Amosmuteb/lux?authorization="+ json_data["access_token"]
+        tab = []
+        main_api =url_api + parametre
+        object_api = requests.get(main_api)
+        lumiere1 = (object_api.json()) # recupère la valeur de la lumière sur le serveur et la stock dans la variable lumiere1
     
     # récuperation de la valeur de l'humidité sur le serveur thinger.io
-    parametre ="v2/users/Amos/devices/Amosmuteb/Humidité_ambiante?authorization="+ json_data["access_token"]
-    tab = []
-    main_api =url_api + parametre
-    object_api = requests.get(main_api)
-    humidite = (object_api.json()) # recupère la valeur de la humidite sur le serveur et la stock dans la variable humidite
+        parametre ="v2/users/Amos/devices/Amosmuteb/Humidité_ambiante?authorization="+ json_data["access_token"]
+        tab = []
+        main_api =url_api + parametre
+        object_api = requests.get(main_api)
+        humidite = (object_api.json()) # recupère la valeur de la humidite sur le serveur et la stock dans la variable humidite
 
     # récuperation de la valeur de l'humidité du sol sur le serveur thinger.io
-    parametre ="v2/users/Amos/devices/Amosmuteb/Humidite_du_sol?authorization="+ json_data["access_token"]
-    tab = []
-    main_api =url_api + parametre
-    object_api = requests.get(main_api)
-    sol_humidite = (object_api.json()) # recupère la valeur de la humidite du sol sur le serveur et la stock dans la variable sol_humidite
+        parametre ="v2/users/Amos/devices/Amosmuteb/Humidite_du_sol?authorization="+ json_data["access_token"]
+        tab = []
+        main_api =url_api + parametre
+        object_api = requests.get(main_api)
+        sol_humidite = (object_api.json()) # recupère la valeur de la humidite du sol sur le serveur et la stock dans la variable sol_humidite
 
     # stockage des valeurs prisent sur arduino
-    capteur = {
-        "lumiere": lumiere1['out'],
-        "temperature" : temperature ['out'],
-        "humidite_ambiante": humidite ['out'],
-        "humidite_du_sol" : sol_humidite ['out']
-        }
+        capteur = {
+            "lumiere": lumiere1['out'],
+            "temperature" : temperature ['out'],
+            "humidite_ambiante": humidite ['out'],
+            "humidite_du_sol" : sol_humidite ['out']
+            }
 
     # affichage des valeurs de capteurs
-    print ("Lumiere optimale : " , capteur["lumiere"]) 
-    print ("Température ambiante : " , capteur["temperature"])
-    print ("Humidité ambiante : " , capteur["humidite_ambiante"])
-    print ("Humidité du sol  : " , capteur["humidite_du_sol"])
+        print ("Lumiere optimale : " , capteur["lumiere"]) 
+        print ("Température ambiante : " , capteur["temperature"])
+        print ("Humidité ambiante : " , capteur["humidite_ambiante"])
+        print ("Humidité du sol  : " , capteur["humidite_du_sol"])
     
-    choix = input("\nTapez 0 pour revenir en arrière et 5 pour quitter:  ")
+        choix = int(input("\nTapez 0 pour revenir en arrière et 5 pour quitter:  "))
     
  # choix 3 possibilité de melanger les deux informations et de pouvoir les traiters
 elif choix ==3:
     print ("\nl'Amour de Dieu est immense")
 
 else:
-    print("\nVeuillez choisir une option !!! \n")
-    print(informations[1])
-    print(informations[2])
-    print(informations[3])
-    choix = int(input("\nQuelles informations souhaitez-vous consulté : "))
+    while choix >=4 :
+        print("\nVeuillez choisir une option !!! \n")
+        print("\n",informations[1],"\n",informations[2],"\n",informations[3])
+        choix = int(input("\nQuelles informations souhaitez-vous consulté : "))
+
 
